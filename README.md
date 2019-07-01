@@ -60,8 +60,8 @@ console.log(hosts.isBlacklisted("example.com")); // returns `true` or `false`
 hosts.filter(mainWindow, {
 	logger: console.log,
 	onRequest: onRequest: (details, callback, shouldBeBlocked) => {
-    // Execute your own onRequest function here...
-  }
+		// Execute your own onRequest function here...
+	}
 });
 ```
 
