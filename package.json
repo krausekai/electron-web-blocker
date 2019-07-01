@@ -1,0 +1,12 @@
+{
+  "name": "electron-hosts-filter",
+  "version": "1.0.0",
+  "description": "Block advertisements, malware, and websites via a hosts file",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+	"author": "Kai Krause <kaikrause95@gmail.com>",
+	"copyright": "Kai Krause <kaikrause95@gmail.com>",
+  "license": "MIT"
+}
