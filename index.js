@@ -29,24 +29,33 @@ function setCustomFilters(opts) {
 	}
 }
 
-var updateTimer = null;
+var updateTimer;
 _this.init = async function(opts) {
-	if (updateTimer) {
-		clearInterval(updateTimer);
-		updateTimer = null;
-	}
+	return new Promise(async function (resolve,reject) {
+		try {
+			if (updateTimer) {
+				clearInterval(updateTimer);
+				updateTimer = null;
+			}
 
-	if (opts && opts.updateAfterSeconds) {
-		updateTimer = setInterval(() => {
-			_this.init(opts);
-		}, opts.updateAfterSeconds * 1000);
-	}
+			if (opts && opts.updateAfterSeconds) {
+				updateTimer = setInterval(() => {
+					_this.init(opts);
+				}, opts.updateAfterSeconds * 1000);
+			}
 
-	await hostsSetup.initialize(opts);
+			await hostsSetup.initialize(opts);
 
-	getHostData();
+			getHostData();
 
-	setCustomFilters(opts);
+			setCustomFilters(opts);
+
+			return resolve();
+		}
+		catch(e) {
+			return reject(e);
+		}
+	});
 }
 
 var httpPrefixReg = new RegExp(/^http(.)+\/\/(www\.|)/, "g");
@@ -63,7 +72,7 @@ _this.isBlacklisted = function(url) {
 			if (userwhitelist.indexOf(row) === -1) {
 				if (row.startsWith("*.")) {
 					var wRow = row.substring(2);
-					if (url.contains(wRow)) return true;
+					if (!url.startsWith(wRow) && url.contains(wRow)) return true;
 				}
 				else if (url.startsWith(row)) return true;
 			}

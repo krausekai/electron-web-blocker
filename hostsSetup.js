@@ -80,13 +80,13 @@ _this.indexArr = function(arr) {
 // UPDATE FILE
 // --------------------------
 
-var updatePath = "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts";
+var path = "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts";
 var updateNow = false;
 var updateAfterSeconds = "259200"; // 3 days
 
 function updateFile() {
 	return new Promise(async function (resolve) {
-		if (!updatePath) return resolve();
+		if (!path) return resolve();
 
 		// rate-limit how often to update the file
 		if (file_properties && file_properties.lastModifiedDate) {
@@ -94,11 +94,11 @@ function updateFile() {
 				updateNow = false;
 
 				// get updated data
-				if (updatePath.startsWith("http")) {
-					var data = await helperFunctions.download(updatePath);
+				if (path.startsWith("http")) {
+					var data = await helperFunctions.download(path);
 				}
-				else if (file.fileExistsHelper(updatePath)) {
-					var data = fs.readFileSync(updatePath, "utf-8");
+				else if (file.fileExistsHelper(path)) {
+					var data = fs.readFileSync(path, "utf-8");
 				}
 				else {
 					throw "Invalid update path";
@@ -124,7 +124,7 @@ var fileIndex = {};
 
 function loadFile() {
 	return new Promise(function (resolve) {
-		if (!updatePath) return resolve();
+		if (!path) return resolve();
 
 		if (file.fileExists(hostsLocation)) {
 			var data = fs.readFileSync(hostsLocation, "utf-8");
@@ -133,6 +133,7 @@ function loadFile() {
 			fileData = _this.prepareArr(data);
 			fileIndex = _this.indexArr(fileData);
 		}
+
 		resolve();
 	});
 }
@@ -145,7 +146,7 @@ var file_properties = {};
 _this.initialize = function(opts) {
 	return new Promise(function (resolve) {
 		if (opts) {
-			if (typeof opts.updatePath === "string") updatePath = opts.updatePath; // allow empty strings
+			if (typeof opts.path === "string") path = opts.path; // allow empty strings
 			updateNow = opts.updateNow || updateNow;
 			updateAfterSeconds = opts.updateAfterSeconds || updateAfterSeconds;
 		}
@@ -156,7 +157,7 @@ _this.initialize = function(opts) {
 		updateFile()
 			.then(() => {return loadFile()})
 			.then(() => {return resolve()});
-	})
+	});
 }
 
 _this.getHosts = function() {
