@@ -50,7 +50,7 @@ _this.download = async function(path) {
 		adapterFor(path).get(path, (resp) => {
 			let data = "";
 
-			if (okStatusCodes.indexOf(resp.statusCode) === -1) {
+			if (okStatusCodes.indexOf(resp.statusCode.toString()) === -1) {
 				console.error(resp.statusCode);
 				resolve(data);
 			}
