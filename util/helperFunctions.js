@@ -39,14 +39,21 @@ var adapterFor = (function() {
 	};
 
   return function(path) {
-    return adapters[url.parse(path).protocol]
+    return adapters[url.parse(path).protocol];
   }
 }());
+
+var okStatusCodes = ["200", "201", "202", "203", "206", "207", "208", "266"];
 
 _this.download = async function(path) {
 	return new Promise((resolve, reject) => {
 		adapterFor(path).get(path, (resp) => {
 			let data = "";
+
+			if (okStatusCodes.indexOf(resp.statusCode) === -1) {
+				console.error(resp.statusCode);
+				resolve(data);
+			}
 
 			resp.on("data", (chunk) => {
 				data += chunk;
@@ -55,6 +62,8 @@ _this.download = async function(path) {
 			resp.on("end", () => {
 				resolve(data);
 			});
+		}).on("error", (e) => {
+			console.error(e);
 		});
 	});
 }

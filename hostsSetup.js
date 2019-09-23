@@ -104,10 +104,8 @@ function updateFile() {
 					throw "Invalid update path";
 				}
 
-				if (!data) return;
-
 				// save it
-				fs.writeFileSync(hostsLocation, data);
+				if (data) fs.writeFileSync(hostsLocation, data);
 			}
 		}
 
