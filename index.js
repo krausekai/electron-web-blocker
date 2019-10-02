@@ -93,7 +93,7 @@ _this.filter = function(view, opts) {
 		onRequest: undefined
 	}, opts);
 
-  view.webContents.session.webRequest.onBeforeRequest(["*://*./*"], (details, callback) => {
+  view.webContents.session.webRequest.onBeforeRequest({urls: ["*://*/*"]}, (details, callback) => {
     var isBlacklisted = _this.isBlacklisted(details.url);
 
 		if (options.onRequest) {

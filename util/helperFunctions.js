@@ -51,7 +51,7 @@ _this.download = async function(path) {
 			let data = "";
 
 			if (okStatusCodes.indexOf(resp.statusCode.toString()) === -1) {
-				console.error(resp.statusCode);
+				console.error(resp.statusCode.toString() + ": " + path);
 				resolve(data);
 			}
 
@@ -63,7 +63,7 @@ _this.download = async function(path) {
 				resolve(data);
 			});
 		}).on("error", (e) => {
-			console.error(e);
+			console.error(e + path);
 		});
 	});
 }
