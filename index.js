@@ -3,6 +3,7 @@
 var _this = module.exports = {};
 
 var hostsSetup = require("./hostsSetup");
+var helperFunctions = require("./util/helperFunctions");
 
 var hosts = {};
 var hostsData = [];
@@ -22,7 +23,7 @@ _this.blacklist = {
 	add : function(arr) {
 		if (arr) {
 			arr = hostsSetup.prepareArr(arr);
-			userblacklist = [...userblacklist, ...arr];
+			userblacklist = helperFunctions.uniqueArray([...userblacklist, ...arr]);
 			userblacklistIndex = hostsSetup.indexArr(userblacklist);
 		}
 	},
@@ -51,7 +52,7 @@ _this.whitelist = {
 	add : function(arr) {
 		if (arr) {
 			arr = hostsSetup.prepareArr(arr);
-			userwhitelist = [...userwhitelist, ...arr];
+			userwhitelist = helperFunctions.uniqueArray([...userwhitelist, ...arr]);
 		}
 	},
 	remove : function(arr) {
