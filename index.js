@@ -18,14 +18,58 @@ function getHostData() {
 	hostsIndex = hosts.hostsIndex;
 }
 
-function setCustomFilters(opts) {
-	if (!opts) return;
-	if (opts.blacklist) {
-		userblacklist = hostsSetup.prepareArr(opts.blacklist);
-		userblacklistIndex = hostsSetup.indexArr(userblacklist);
+_this.blacklist = {
+	add : function(arr) {
+		if (arr) {
+			arr = hostsSetup.prepareArr(arr);
+			userblacklist = [...userblacklist, ...arr];
+			userblacklistIndex = hostsSetup.indexArr(userblacklist);
+		}
+	},
+	remove : function(arr) {
+		if (arr) {
+			arr = hostsSetup.prepareArr(arr);
+			for (let i = 0; i < arr.length; i++) {
+				let index;
+				while (index = userblacklistIndex.indexOf(arr[i]), index !== -1) {
+					userblacklistIndex.splice(index, 1);
+				}
+			}
+			userblacklistIndex = hostsSetup.indexArr(userblacklist);
+		}
+	},
+	reset : function() {
+		userblacklist = [];
+		userblacklistIndex = {};
+	},
+	get : function() {
+		return userblacklist;
 	}
-	if (opts.whitelist) {
-		userwhitelist = hostsSetup.prepareArr(opts.whitelist);
+}
+
+_this.whitelist = {
+	add : function(arr) {
+		if (arr) {
+			arr = hostsSetup.prepareArr(arr);
+			userwhitelist = [...userwhitelist, ...arr];
+		}
+	},
+	remove : function(arr) {
+		if (arr) {
+			arr = hostsSetup.prepareArr(arr);
+			for (let i = 0; i < arr.length; i++) {
+				let index;
+				while (index = userwhitelist.indexOf(arr[i]), index !== -1) {
+					userwhitelist.splice(index, 1);
+				}
+			}
+		}
+	},
+	reset : function() {
+		userwhitelist = [];
+	},
+	get : function() {
+		return userwhitelist;
 	}
 }
 
@@ -48,7 +92,8 @@ _this.init = async function(opts) {
 
 			getHostData();
 
-			setCustomFilters(opts);
+			if (opts && opts.blacklist) _this.blacklist.add(opts.blacklist);
+			if (opts && opts.whitelist) _this.whitelist.add(opts.whitelist);
 
 			return resolve();
 		}

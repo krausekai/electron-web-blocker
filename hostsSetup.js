@@ -18,15 +18,18 @@ var hostsLocation = path.join(__dirname, "hosts.txt");
 var commentsReg = new RegExp(/#.+/, "g"); // replace comments starting with #
 var localAddressReg = new RegExp(/(127\.|0\.){3}\d/, "g"); // replace 0.0.0.0, 127.0.0.1, etc
 var whitespaceReg = new RegExp(/\s/, "g"); // remove all whitespace
-var wwwReg = new RegExp(/^www./, "g"); // remove HTTP www. prefix
+let httpPrefixReg = new RegExp(/^http(.)+\/\/(www\.|)/, "g"); // remove HTTP www. prefix
+var wwwReg = new RegExp(/^www./, "g"); // remove www. prefix
 var pipeReg = new RegExp(/^\|\|/, "g"); // remove double pipe prefix
 var caratReg = new RegExp(/\^.+/, "g"); // remove everything from ^ suffix
 var colonReg = new RegExp(/::/, "g"); // remove double colons
 var dnsmasqPreReg = new RegExp(/^address\=\//, "g"); // remove double colon prefix
+var endSlashReq = new RegExp(/\//, "g"); // remove slashes
 
 function prepareRow(row) {
 	row = row.replace(commentsReg, "");
 	row = row.replace(localAddressReg, "");
+	row = row.replace(httpPrefixReg, "");
 	row = row.replace(wwwReg, "");
 	row = row.replace(pipeReg, "");
 	row = row.replace(caratReg, "");
@@ -34,6 +37,7 @@ function prepareRow(row) {
 	row = row.replace(dnsmasqPreReg, "");
 	// only after
 	row = row.replace(whitespaceReg, "");
+	row = row.replace(endSlashReq, "");
 	return row;
 }
 

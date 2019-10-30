@@ -24,7 +24,7 @@ subdomain.example.com
 
 Hosts files which start with a local address (e.g. ``0.0.0.0``, ``127.0.0.1``) can also be used. The local addresses will not have a functional purpose, and are removed at initialization, along with the prefixes and suffixes ``||``, ``^``, ``::``, ``#``, ``address=/``, ``www.``, and whitespace and duplicate addresses.
 
-### init() options (promise) (optional)
+### init() (promise) (optional)
 
 - ``path`` (``string``): a local or remote HTTP/HTTPS path to the web addresses/hosts file that overrides the internal hosts file; leave as an empty string ("") to disable the internal hosts file
 - ``updateAfterSeconds`` (``integer``): update the web addresses file after a period of time in seconds
@@ -32,7 +32,18 @@ Hosts files which start with a local address (e.g. ``0.0.0.0``, ``127.0.0.1``) c
 - ``blacklist`` (``string``, ``array``): a custom blacklist in addition to the web addresses/hosts file, such as defined by user input
 - ``whitelist`` (``string``, ``array``): a custom whitelist that overrides the web addresses/hosts file and custom blacklist
 
-### filter() options (optional)
+### list (``whitelist``, ``blacklist``) (optional)
+
+- ``.add()`` (``string``, ``array``): add to the current list
+- ``.remove()`` (``string``, ``array``): remove from the current list
+- ``.reset()``: reset the list
+- ``.get()``: get the current list array
+
+### isBlacklisted(``str``):
+
+- returns whether or not a url as str is blacklisted or not
+
+### filter() (optional)
 
 - ``logger`` (``function``): a way to log blocked requests (e.g. ``console.log``)
 - ``onRequest`` (``function``): gets called like the original ``onRequest`` of a ``BrowserWindow`` or ``BrowserView`` instance.
