@@ -24,7 +24,7 @@ var pipeReg = new RegExp(/^\|\|/, "g"); // remove double pipe prefix
 var caratReg = new RegExp(/\^.+/, "g"); // remove everything from ^ suffix
 var colonReg = new RegExp(/::/, "g"); // remove double colons
 var dnsmasqPreReg = new RegExp(/^address\=\//, "g"); // remove double colon prefix
-var endSlashReq = new RegExp(/\//, "g"); // remove slashes
+var endSlashReg = new RegExp(/\/$/, "g"); // remove ending slash
 
 function prepareRow(row) {
 	row = row.replace(commentsReg, "");
@@ -37,7 +37,7 @@ function prepareRow(row) {
 	row = row.replace(dnsmasqPreReg, "");
 	// only after
 	row = row.replace(whitespaceReg, "");
-	row = row.replace(endSlashReq, "");
+	row = row.replace(endSlashReg, "");
 	return row;
 }
 
