@@ -45,25 +45,44 @@ var adapterFor = (function() {
 
 var okStatusCodes = ["200", "201", "202", "203", "206", "207", "208", "266"];
 
-_this.download = async function(path) {
+_this.download = async function(path, encoding, timeout) {
 	return new Promise((resolve, reject) => {
+		let timer = null;
+		function createTimeout() {
+			if (timeout === 0) return;
+			if (!timer) timeout = timeout || 3000;
+			if (timer) clearTimeout(timer);
+
+			timer = setTimeout(() => {
+				console.error("Timed out:", path);
+				resolve("");
+			}, timeout);
+		}
+		createTimeout();
+
 		adapterFor(path).get(path, (resp) => {
+			resp.setEncoding(encoding || "utf8");
+
 			let data = "";
 
 			if (okStatusCodes.indexOf(resp.statusCode.toString()) === -1) {
-				console.error(resp.statusCode.toString() + ": " + path);
+				console.error(resp.statusCode.toString() + ":", path);
 				resolve(data);
 			}
 
 			resp.on("data", (chunk) => {
+				createTimeout();
 				data += chunk;
 			});
 
 			resp.on("end", () => {
+				clearTimeout(timer);
 				resolve(data);
 			});
 		}).on("error", (e) => {
-			console.error(e + path);
+			clearTimeout(timer);
+			console.error(e, path);
+			resolve("");
 		});
 	});
 }

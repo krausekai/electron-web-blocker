@@ -1,6 +1,6 @@
 {
   "name": "electron-web-blocker",
-  "version": "1.0.5",
+  "version": "1.0.6",
 	"description": "Block advertisements, malware, and websites in Electron",
 	"homepage": "https://github.com/krausekai/electron-web-blocker",
 	"repository": "https://github.com/krausekai/electron-web-blocker",
